@@ -1,0 +1,2 @@
+# item-catalog
+In this project, I will be developing a web application that provides a list of items within a variety of categories and integrate third party user registration and authentication. Authenticated users should have the ability to post, edit, and delete their own items. I will be creating this project essentially from scratch, no templates have been provided for me. This means free reign over the HTML, the CSS, and the files that include the application itself utilizing Flask.
