@@ -1,15 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="">
+      <meta name="author" content="">
 
-  <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
-   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
-  </script>
+      <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+      <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+      <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+      <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+      </script>
 
-<script src="//apis.google.com/js/platform.js?onload=start"> </script>
+      <script src="//apis.google.com/js/platform.js?onload=start"> </script>
 
-<!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+      <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+      <style>
+            .center {
+              position: fixed;
+          top: 1%;
+          left: 1%;
+          width: 50%;
+          float: left;
+      }
+      </style>
 
+      <style>
+      .right {
+          position: fixed;
+          top: 1%;
+          left: 30%;
+          width: 50%;
+          float: left;
+      }
+      </style>
 
 </head>
 
@@ -17,21 +43,11 @@
 <body>  
 
 
+
 <!-- GOOGLE PLUS SIGN IN BUTTON-->
 
-          
-          <div id="signInButton">
-          <span class="g-signin"
-            data-scope="openid email"
-            data-clientid="443151339337-4lqiie16i1utc8lig9kepgbnfrvm3ubc.apps.googleusercontent.com"
-            data-redirecturi="postmessage"
-            data-accesstype="offline"
-            data-cookiepolicy="single_host_origin"
-            data-callback="signInCallback"
-            data-approvalprompt="force">
-          </span>
-        </div>
 
+<div class="right">
   <div id="result"></div>
 
     <script>
@@ -64,10 +80,11 @@
       }); } }
     </script>
 
-
+</div>
 <!--END GOOGLE PLUS SIGN IN BUTTON -->
 
 <!--FACEBOOK SIGN IN -->
+<div class="right">
 <div id="fb-root"></div>
 <script>
   window.fbAsyncInit = function() {
@@ -118,17 +135,35 @@
     });
   }
 </script>
-
- <div class="fb-login-button" 
-      data-max-rows="1" 
-      data-size="xlarge" 
-      data-show-faces="false" 
-      data-auto-logout-link="false" 
-      scope="public_profile,email" 
-      onlogin="sendTokenToServer()"></div>   
+</div>
+    <div class="center">
+        <h2>Please select one of the following to log in</h2> 
+          <div id="signInButton">
+          <span class="g-signin"
+            data-scope="openid email"
+            data-clientid="443151339337-4lqiie16i1utc8lig9kepgbnfrvm3ubc.apps.googleusercontent.com"
+            data-redirecturi="postmessage"
+            data-accesstype="offline"
+            data-cookiepolicy="single_host_origin"
+            data-callback="signInCallback"
+            data-approvalprompt="force">
+          </span>
+        </div>
+     
+      <div class="fb-login-button" 
+        data-max-rows="1" 
+        data-size="xlarge" 
+        data-show-faces="false" 
+        data-auto-logout-link="false" 
+        scope="public_profile,email" 
+        onlogin="sendTokenToServer()">
+      </div>
+    </div>   
     
 <!--END FACEBOOK SIGN IN -->
-    
+
+
+
 </body>
 
 </html>
