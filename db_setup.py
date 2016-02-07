@@ -33,8 +33,8 @@ class Category(Base):
     def serialize(self):
         """Return object data in easily serializeable format"""
         return {
-            'name': self.name,
-            'id': self.cid,
+            'category-name': self.name,
+            'category-id': self.cid,
         }
 
 
@@ -54,15 +54,14 @@ class CategoryItem(Base):
     def serialize(self):
         """Return object data in easily serializeable format"""
         return {
-            'category': self.category_id,  
-            'id': self.item_id,
-            'name': self.name,
-            'description': self.description,
+            'category-id': self.category_id,  
+            'item-id': self.item_id,
+            'item-name': self.name,
+            'item-description': self.description,
         }
+         
 
 engine = create_engine('sqlite:///catelogitemswithusers.db')
-
-# engine = create_engine('sqlite:///restaurantmenu.db')
 
 # engine = create_engine('postgres://yihuuuoggpghyz:5uuyZvmf-iZ0tmLcifhDinkskk@ec2-54-235-152-114.compute-1.amazonaws.com:5432/da7irrd94cnabg')
 
