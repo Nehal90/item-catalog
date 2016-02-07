@@ -355,7 +355,7 @@ def newItem(category_id):
     category = session.query(Category).filter_by(cid = category_id).one()
   
     if login_session['user_id'] != category.user_id:
-        return "<script>function myFunction() {alert('You are not authorized to add items to this restaurant. Please create your own category in order to add items.');}</script><body onload='myFunction()''>"
+        return "<script>function myFunction() {alert('You are not authorized to add items to this category. Please create your own category in order to add items.');}</script><body onload='myFunction()''>"
   
     if request.method == 'POST':
         newItem = CategoryItem(name = request.form['name'], description = request.form['description'], 
@@ -377,7 +377,7 @@ def editItem(category_id, item_id):
     category = session.query(Category).filter_by(cid = category_id).one()
     editedItem = session.query(CategoryItem).filter_by(item_id = item_id).one()
     
-    if login_session['user_id'] != restaurant.user_id:
+    if login_session['user_id'] != category.user_id:
         return "<script>function myFunction() {alert('You are not authorized to edit items to this category. Please create your own category in order to edit items.');}</script><body onload='myFunction()''>"
   
     if request.method == 'POST':
@@ -399,10 +399,10 @@ def deleteItem(category_id, item_id):
     if 'username' not in login_session:
         return redirect('/login')
   
-    category = session.query(Category).filter_by(cid = restaurant_id).one()
+    category = session.query(Category).filter_by(cid = category_id).one()
     deletedItem = session.query(CategoryItem).filter_by(item_id = item_id).one()
 
-    if login_session['user_id'] != restaurant.user_id:
+    if login_session['user_id'] != category.user_id:
         return "<script>function myFunction() {alert('You are not authorized to delete items in this category. Please create your own category in order to delete items.');}</script><body onload='myFunction()''>"
         
     if request.method == 'POST':
@@ -442,7 +442,7 @@ def disconnect():
         del login_session['picture']
         del login_session['user_id']
         del login_session['provider']
-        flash("You have successfully been logged out.")
+        flash("You have successfully logged out.")
         return redirect(url_for('categories'))
     else:
         flash("You were not logged in!")
