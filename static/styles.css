@@ -147,6 +147,7 @@ h3 {
 .category-list {
  	background-color: #F0F0F0;
  	padding: 20px;
+ 	margin-bottom: 5px;
 }
 .category-list:hover {
  	background-color: #e1e17f;
@@ -154,13 +155,11 @@ h3 {
 }
 .item-item {
 	background: #F0F0F0;
-	padding: 20px;
-	margin: 20px;
-	margin-left: -20px;
+	padding: 10px;
+	margin-bottom: 15px;
+	margin-left: 0px;
 }
-.item-price {
-	font-weight: 700;
-}
+
 .creator {
 	padding-right: 20px;
 	margin-top: -20px;
@@ -188,5 +187,3 @@ h3 {
 	text-align: center;
 
 }
-
-
