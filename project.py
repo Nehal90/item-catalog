@@ -256,22 +256,29 @@ def getUserID(email):
 
 #####################Authorization Method Ends#####################################################
 
+#Adding JSON Endpoints
+
 @app.route('/categories/JSON')
 def categoryJSON():
+    """Returns all categories in easily serializeable format"""
     categories = session.query(Category).all()
     return jsonify(Categories = [i.serialize for i in categories])
 
 
 @app.route('/categories/<int:category_id>/items/JSON')
 def categoryItemJSON(category_id):
-        category = session.query(Category).filter_by(cid = category_id).one()
-        items = session.query(CategoryItem).filter_by(category_id = category_id).all()
-        return jsonify(Items = [i.serialize for i in items])
+    """Returns all items within a category in easily serializeable format"""
+    category = session.query(Category).filter_by(cid = category_id).one()
+    items = session.query(CategoryItem).filter_by(category_id = category_id).all()
+    return jsonify(Items = [i.serialize for i in items])
   
 @app.route('/categories/<int:category_id>/items/<int:item_id>/JSON')
 def itemJSON(category_id, item_id):
+    """Returns a specific item in easily serializeable format"""
     categoryItem = session.query(CategoryItem).filter_by(item_id = item_id).one()
     return jsonify(CategoryItem = categoryItem.serialize)
+
+#End of JSON Endpoint definitions
 
 @app.route('/')
 @app.route('/categories/')
@@ -420,11 +427,7 @@ def deleteItem(category_id, item_id):
 def latestItems():
     items = session.query(CategoryItem).order_by(CategoryItem.item_id.desc()).limit(10)
     return render_template('latestitems.html', items = items)
-#    categories = session.query(Category).all()
-#    return render_template('latestitems.html')
 
-
-    
 
 # Disconnect based on provider
 @app.route('/disconnect')
