@@ -18,3 +18,62 @@ into the Terminal. If you named the file from step 4 as something other than app
 
 6. Access and test your application by visiting http://localhost:8000 locally on your browser.
 
+Accessing JSON End Points:
+There are three JSON End poits avaiable. Theya are as followed:
+1. '../categories/JSON')
+Returns a JSON list of all the categories in the catalog.
+
+2. '../categories/<int:category_id>/items/JSON')
+Returns a JSON list of all the items available within a category.
+
+Example:
+
+'http://localhost:5000/categories/2/items/JSON' returns:
+
+{
+  "CategoryItems": [
+    {
+      "category": 2,
+      "description": "A high or low shoe, usually of fabric such as canvas, with a rubber or synthetic sole",
+      "id": 7,
+      "name": "Sneakers"
+    },
+    {
+      "category": 2,
+      "description": "A sleeveless shirt is a shirt manufactured without sleeves, or one whose sleeves have been cut off.",
+      "id": 8,
+      "name": "Sleeveless Shirt"
+    },
+    {
+      "category": 2,
+      "description": "A circular band of metal, wood, or similar material, especially one used for binding the staves of barrels or forming part of a framework.",
+      "id": 9,
+      "name": "Hoop"
+    },
+    {
+      "category": 2,
+      "description": "A board placed at or forming the back of something, such as a collage or piece of electronic equipment.",
+      "id": 10,
+      "name": "Backboard"
+    }
+  ]
+}
+
+
+
+3. '../categories/<int:category_id>/items/<int:item_id>/JSON') 
+
+Example:
+
+ 'http://localhost:5000/categories/2/items/2/JSON' returns:
+
+{
+  "CategoryItem": {
+    "category": 1,
+    "description": "The shirt worn by players.",
+    "id": 2,
+    "name": "Jersey"
+  }
+}
+
+Returns a JSON list for a specific item.
