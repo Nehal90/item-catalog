@@ -68,6 +68,7 @@
 <!--END GOOGLE PLUS SIGN IN BUTTON -->
 
 <!--FACEBOOK SIGN IN -->
+<div id="fb-root"></div>
 <script>
   window.fbAsyncInit = function() {
   FB.init({
@@ -80,11 +81,11 @@
   };
   // Load the SDK asynchronously
   (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=421946168016603";
+  fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));
   // Here we run a very simple test of the Graph API after login is
   // successful.  See statusChangeCallback() for when this call is made.
@@ -118,19 +119,17 @@
   }
 </script>
 
-
-<button>
-         
-
-          <fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
-<a href='javascript:sendTokenToServer()'>Login with Facebook</a>
-
-</fb:login-button>
-
-
-        </button>
+ <div class="fb-login-button" 
+      data-max-rows="1" 
+      data-size="xlarge" 
+      data-show-faces="false" 
+      data-auto-logout-link="false" 
+      scope="public_profile,email" 
+      onlogin="sendTokenToServer()"></div>   
+    
 <!--END FACEBOOK SIGN IN -->
+    
+</body>
 
-  </body>
+</html>
 
-  </html>

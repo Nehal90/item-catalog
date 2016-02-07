@@ -8,8 +8,8 @@
 		<div class="col-md-11 col-md-offset-1 padding-none">
 			<h1>{{ category.name }}
 			<figure class="creator">
-				<img src="{{ url_for('static', filename='blank_user.gif') }}">
-				<figcaption>Menu creator's name</figcaption>
+				<img src="{{ creator.picture }}">
+				<figcaption>{{ creator.name }}</figcaption>
 			</figure>
 			</h1>
 
@@ -39,7 +39,7 @@
 			</a>
 			<a href="{{url_for('newItem', category_id = category.cid )}}">
 				<button class="btn btn-default" id="new-item-item">
-					<span class="glyphicon glyphicon-glass" aria-hidden="true"></span>Add Item
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add Item
 				</button>
 			</a>
 						<a href="{{url_for('deleteCategory', category_id = category.cid )}}">
@@ -54,7 +54,7 @@
 	{% if items !=[] %}	
 		<div class="row">
 			<div class="col-md-1"></div>
-			<div class="col-md-3">
+			<div class="col-md-12 col-lg-6 col-sm-12">
 				<h2>Items</h2>
 					{% for i in items %}
 							<div class="item-item">
