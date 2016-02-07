@@ -2,7 +2,7 @@ import os
 
 import sys
 
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, func
 
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -45,6 +45,7 @@ class CategoryItem(Base):
     item_id = Column(Integer, primary_key=True)
     description = Column(String(250))
     category_id = Column(Integer, ForeignKey('category.cid'))
+    created_on = Column(DateTime, default=func.now())
     category = relationship(Category)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
@@ -53,9 +54,10 @@ class CategoryItem(Base):
     def serialize(self):
         """Return object data in easily serializeable format"""
         return {
+            'category': self.category_id,  
+            'id': self.item_id,
             'name': self.name,
             'description': self.description,
-            'id': self.mid,
         }
 
 engine = create_engine('sqlite:///catelogitemswithusers.db')

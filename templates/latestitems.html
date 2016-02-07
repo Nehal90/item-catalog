@@ -1,0 +1,51 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+
+	<div class="row top-item">
+		<div class="col-md-10"></div>
+		<div class="col-md-2 text-right">
+					</div>
+	</div>
+	<div class="row divider blue">
+		<div class="col-md-12"></div>
+	</div>
+	<div class="row banner main">
+		<div class="col-md-1"></div>
+		<div class="col-md-11 padding-none">
+			<h1>Latest Items Added</h1>
+		</div>
+	</div>
+
+<div class = 'flash'>
+		      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+          
+        <ul>
+        {% for message in messages %}
+            <li> <strong> {{ message }} </strong> </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+</div>
+
+{% if items !=[] %}	
+		<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-12 col-lg-6 col-sm-12">
+					{% for i in items %}
+							<div class="item-item">
+								<h3>{{i.name}}</h3>
+								<p>{{i.description}}</p>
+								<p>Added on {{i.created_on}} by {{i.user.name}}</p>
+							</div>
+					{% endfor %}	
+			</div>
+			<div class="col-md-1"></div>
+		</div>
+{% endif %}
+
+
+{% endblock %}

@@ -24,7 +24,7 @@ session = DBSession()
 
 # Create dummy user
 User1 = User(name="Nehal Ahmed", email="an425@live.com",
-             picture='https://www.facebook.com/photo.php?fbid=10153796876781252&l=6ff0f5dd5a')
+             picture='http://icons.iconarchive.com/icons/treetog/junior/128/earth-icon.png')
 session.add(User1)
 session.commit()
 

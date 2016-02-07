@@ -256,6 +256,23 @@ def getUserID(email):
 
 #####################Authorization Method Ends#####################################################
 
+@app.route('/categories/JSON')
+def categoryJSON():
+    categories = session.query(Category).all()
+    return jsonify(Category = [i.serialize for i in categories])
+
+
+@app.route('/categories/<int:category_id>/item/JSON')
+def categoryItemJSON(category_id):
+        category = session.query(Category).filter_by(cid = category_id).one()
+        items = session.query(CategoryItem).filter_by(category_id = category_id).all()
+        return jsonify(CategoryItems = [i.serialize for i in items])
+  
+@app.route('/categories/<int:category_id>/item/<int:item_id>/JSON')
+def itemJSON(category_id, item_id):
+    categoryItem = session.query(CategoryItem).filter_by(item_id = item_id).one()
+    return jsonify(CategoryItem = categoryItem.serialize)
+
 @app.route('/')
 @app.route('/categories/')
 def categories():
@@ -264,6 +281,7 @@ def categories():
         return render_template('publiccategories.html', categories = categories)
     else:
         return render_template('categories.html', categories = categories)
+
 
 @app.route('/categories/new/', methods=['GET', 'POST'])
 def newCategory():
@@ -326,7 +344,7 @@ def categoryItem(category_id):
     if 'username' not in login_session or creator.id != login_session['user_id']:
         return render_template('publicitem.html', items = items, category = category, creator = creator)
     else:
-        return render_template('item.html', items = items, category = category)
+        return render_template('item.html', items = items, category = category, creator = creator)
 
 
 @app.route('/categories/<int:category_id>/item/new/', methods=['GET', 'POST'])
@@ -345,9 +363,10 @@ def newItem(category_id):
         session.add(newItem)
         session.commit()
         flash('New Item %s Successfully Created' % (newItem.name))
-        return redirect(url_for('categorytItem', category_id = category_id))
+        return redirect(url_for('categories', category_id = category_id))
     else:
-        return render_template('newitem.html', category_id = category_id)
+        return render_template('newitem.html', category_id = category_id, category = category)
+
 
 
 @app.route('/categories/<int:category_id>/<int:item_id>/edit/', methods=['GET', 'POST'])
@@ -381,7 +400,7 @@ def deleteItem(category_id, item_id):
         return redirect('/login')
   
     category = session.query(Category).filter_by(cid = restaurant_id).one()
-    deletedItem = session.query(MenuItem).filter_by(item_id = item_id).one()
+    deletedItem = session.query(CategoryItem).filter_by(item_id = item_id).one()
 
     if login_session['user_id'] != restaurant.user_id:
         return "<script>function myFunction() {alert('You are not authorized to delete items in this category. Please create your own category in order to delete items.');}</script><body onload='myFunction()''>"
@@ -395,6 +414,17 @@ def deleteItem(category_id, item_id):
          return render_template(
             'deleteitem.html', category_id = category_id, item = deletedItem)
 
+
+#Adding Latest Item Functionality
+@app.route('/categories/latest-items/')
+def latestItems():
+    items = session.query(CategoryItem).order_by(CategoryItem.item_id.desc()).limit(10)
+    return render_template('latestitems.html', items = items)
+#    categories = session.query(Category).all()
+#    return render_template('latestitems.html')
+
+
+    
 
 # Disconnect based on provider
 @app.route('/disconnect')
