@@ -15,7 +15,7 @@ terminal). You can find further instructions on how to do so here .
 
 5. Run your application within the VM by typing python /vagrant/item-catalog/project.py
 
-6. Access and test the application by visiting http://localhost:8000 http://localhost:your-vm-port-number or locally on your browser.
+6. Access and test the application by visiting http://localhost:5000 http://localhost:your-vm-port-number or locally on your browser.
 
 Accessing JSON End Points:
 There are three JSON End poits avaiable. Theya are as followed:
