@@ -3,9 +3,9 @@ from sqlalchemy.orm import sessionmaker
 
 from db_setup import Category, Base, CategoryItem, User
 
-engine = create_engine('sqlite:///catelogitemswithusers.db')
+# engine = create_engine('sqlite:///catelogitemswithusers.db')
 
-# engine = create_engine('postgres://yihuuuoggpghyz:5uuyZvmf-iZ0tmLcifhDinkskk@ec2-54-235-152-114.compute-1.amazonaws.com:5432/da7irrd94cnabg')
+engine = create_engine('postgres://uiqzqtqlesjzzn:fxAK1ml3_UGwN9YOz70-Y_L66-@ec2-107-20-242-191.compute-1.amazonaws.com:5432/dv91n1mvr0bap')
 
 # Bind the engine to the metadata of the Base class so that the
 # declaratives can be accessed through a DBSession instance

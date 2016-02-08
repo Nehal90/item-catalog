@@ -23,7 +23,9 @@ APPLICATION_NAME = "Catalog Shopping List"
 
 # Connect to Database and create database session
 
-engine = create_engine('sqlite:///catelogitemswithusers.db')
+# engine = create_engine('sqlite:///catelogitemswithusers.db')
+
+engine = create_engine('postgres://uiqzqtqlesjzzn:fxAK1ml3_UGwN9YOz70-Y_L66-@ec2-107-20-242-191.compute-1.amazonaws.com:5432/dv91n1mvr0bap')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -283,9 +285,8 @@ def itemJSON(category_id, item_id):
 @app.route('/')
 @app.route('/categories/')
 def categories():
-    
+    categories = session.query(Category).all()
     if 'username' not in login_session:
-        categories = session.query(Category).all()
         return render_template('publiccategories.html', categories=categories)
     else:
         return render_template('categories.html', categories=categories)
@@ -453,7 +454,7 @@ def disconnect():
         return redirect(url_for('categories'))
 
 
-if __name__ == '__main__':
-   app.secret_key = 'super_secret_key'
-   app.debug = True
-   app.run(host='0.0.0.0', port=5000)
+#if __name__ == '__main__':
+app.secret_key = 'super_secret_key'
+app.debug = True
+#   app.run(host='0.0.0.0', port=5000)

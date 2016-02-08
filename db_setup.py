@@ -18,7 +18,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
     email = Column(String(250), nullable=False)
-    picture = Column(String(250))
+    picture = Column(String(750))
 
 class Category(Base):
     __tablename__ = 'category'
@@ -43,7 +43,7 @@ class CategoryItem(Base):
 
     name = Column(String(80), nullable=False)
     item_id = Column(Integer, primary_key=True)
-    description = Column(String(250))
+    description = Column(String)
     category_id = Column(Integer, ForeignKey('category.cid'))
     created_on = Column(DateTime, default=func.now())
     category = relationship(Category)
@@ -61,9 +61,9 @@ class CategoryItem(Base):
         }
          
 
-engine = create_engine('sqlite:///catelogitemswithusers.db')
+# engine = create_engine('sqlite:///catelogitemswithusers.db')
 
-# engine = create_engine('postgres://yihuuuoggpghyz:5uuyZvmf-iZ0tmLcifhDinkskk@ec2-54-235-152-114.compute-1.amazonaws.com:5432/da7irrd94cnabg')
+engine = create_engine('postgres://uiqzqtqlesjzzn:fxAK1ml3_UGwN9YOz70-Y_L66-@ec2-107-20-242-191.compute-1.amazonaws.com:5432/dv91n1mvr0bap')
 
 Base.metadata.create_all(engine)
 
