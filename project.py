@@ -267,7 +267,7 @@ def categoryJSON():
     return jsonify(Categories=[i.serialize for i in categories])
 
 
-@app.route('/categories/<int:category_id>/items/JSON')
+@app.route('/categories/<int:category_id>/item/JSON')
 def categoryItemJSON(category_id):
     """Returns all items within a category in easily serializeable format"""
     category = session.query(Category).filter_by(cid = category_id).one()
