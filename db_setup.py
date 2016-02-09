@@ -61,9 +61,9 @@ class CategoryItem(Base):
         }
          
 
-# engine = create_engine('sqlite:///catelogitemswithusers.db')
+engine = create_engine('sqlite:///catelogitemswithusers.db')
 
-engine = create_engine('postgres://uiqzqtqlesjzzn:fxAK1ml3_UGwN9YOz70-Y_L66-@ec2-107-20-242-191.compute-1.amazonaws.com:5432/dv91n1mvr0bap')
+# engine = create_engine('postgres://uiqzqtqlesjzzn:fxAK1ml3_UGwN9YOz70-Y_L66-@ec2-107-20-242-191.compute-1.amazonaws.com:5432/dv91n1mvr0bap')
 
 Base.metadata.create_all(engine)
 
