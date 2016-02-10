@@ -37,7 +37,7 @@
 			<div class="col-md-12 col-lg-6 col-sm-12">
 					{% for i in items %}
 							<div class="item-item">
-								<h3>{{i.name}}</h3>
+								<h3>{{i.name}} ({{i.category.name}})</h3>
 								<p>{{i.description}}</p>
 								<p>Added on {{i.created_on}} by {{i.user.name}}</p>
 							</div>
