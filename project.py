@@ -324,17 +324,14 @@ def newCategory():
     args: None
     returns: The categories page with the new category listed.
     """
-    if 'username' not in login_session:
-        return redirect('/login')
-    else:
+    if request.method == 'POST':
         newItem = Category(name=request.form['name'], user_id=login_session['user_id'])
-        if request.method == 'POST' and user_authorized(newItem.user_id, login_session['user_id']):
-            session.add(newItem)
-            session.commit()
-            flash('New Category %s Successfully Created' % newItem.name)
-            return redirect(url_for('categories'))
-        else:
-            return render_template('newcategory.html')
+        session.add(newItem)
+        session.commit()
+        flash('New Category %s Successfully Created' % newItem.name)
+        return redirect(url_for('categories'))
+    else:
+        return render_template('newcategory.html')
 
 @app.route('/categories/<int:category_id>/edit/', methods=['GET', 'POST'])
 def editCategory(category_id):
