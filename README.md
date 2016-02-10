@@ -1,7 +1,7 @@
 # item-catalog
 In this project, I will be developing a web application that provides a list of items within a variety of categories and integrate third party user registration and authentication. Authenticated users should have the ability to post, edit, and delete their own items. I will be creating this project essentially from scratch, no templates have been provided for me. This means free reign over the HTML, the CSS, and the files that include the application itself utilizing Flask.
 
-Getting Started
+# Getting Started
 
 Before we begin coding, there are several steps that you should take to make sure that you have everything downloaded in order to run your future web application.
 1. Install Vagrant and VirtualBox if you have not done so already. Instructions on how to do so can be found on the websites as well as in the course materials.
@@ -17,7 +17,7 @@ terminal). You can find further instructions on how to do so here .
 
 6. Access and test the application by visiting http://localhost:5000 http://localhost:your-vm-port-number or locally on your browser.
 
-Accessing JSON End Points:
+# Accessing JSON Endpoints:
 There are three JSON End poits avaiable. Theya are as followed:
 1. '../categories/JSON')
 Returns a JSON list of all the categories in the catalog.
@@ -76,3 +76,13 @@ Example:
 }
 
 Returns a JSON list for a specific item.
+
+# Accessing Atom Feed Endpoints:
+
+Atom feed is available for latest ten items added in the db.
+
+Access link: ../recent-items.atom
+
+Example:
+
+'http://localhost:5000/recent-items.atom' will return a feed of latest ten items added.
