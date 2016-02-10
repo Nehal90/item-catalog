@@ -4,16 +4,17 @@ from sqlalchemy.orm import sessionmaker
 from db_setup import Category, Base, CategoryItem, User
 
 from flask import session as login_session
-import random
-import string
+from flask import make_response, g, request, redirect, url_for
+from functools import wraps
 
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import AccessTokenCredentials
 from oauth2client.client import FlowExchangeError
+
+import random
+import string
 import httplib2
 import json
-from flask import make_response, g, request, redirect, url_for
-from functools import wraps
 import requests
 
 app = Flask(__name__)
@@ -262,6 +263,14 @@ def user_authorized(category_user_id, login_session_user_id):
         return "<script>function myFunction() {alert('You are not authorized to edit this. Please create your own category and items in order to edit.');}</script><body onload='myFunction()''>"
     else:
         return True  
+
+def login_required(category_id):
+    @wraps(category_id)
+    def decorated_function(*args, **kwargs):
+        if 'username' not in login_session:
+            return redirect(url_for('/login', next=request.url))
+        return category_id(*args, **kwargs)
+    return decorated_function
 #####################Authorization Method Ends#####################################################
 
 # Adding JSON Endpoints
@@ -329,11 +338,12 @@ def newCategory():
         session.add(newItem)
         session.commit()
         flash('New Category %s Successfully Created' % newItem.name)
-        return redirect(url_for('categories'))
+        return redirect(url_for('categoryItem', category_id = newItem.cid))
     else:
         return render_template('newcategory.html')
 
 @app.route('/categories/<int:category_id>/edit/', methods=['GET', 'POST'])
+@login_required
 def editCategory(category_id):
     """
     class name: editCategory
@@ -341,23 +351,21 @@ def editCategory(category_id):
     args: category_id (data type: int): the id of the category.
     returns: The categories page with the edited category listed.
     """
-    if 'username' not in login_session:
-        return redirect('/login')
+    editedCategory = session.query(Category).filter_by(cid = category_id).one()
+    if request.method == 'POST' and user_authorized(editedCategory.user_id, login_session['user_id']):
+        if request.form['name']:
+            editedCategory.name = request.form['name']
+        session.add(editedCategory)
+        session.commit()
+        flash('Category Successfully Edited %s' % editedCategory.name)
+        return redirect(url_for('categoryItem', category_id=category_id))
     else:
-        editedCategory = session.query(Category).filter_by(cid = category_id).one()
-        if request.method == 'POST' and user_authorized(editedCategory.user_id, login_session['user_id']):
-            if request.form['name']:
-                editedCategory.name = request.form['name']
-            session.add(editedCategory)
-            session.commit()
-            flash('Category Successfully Edited %s' % editedCategory.name)
-            return redirect(url_for('categories'))
-        else:
-             return render_template(
-                'editcategory.html', category=editedCategory)
+        return render_template(
+            'editcategory.html', category=editedCategory)
 
 
 @app.route('/categories/<int:category_id>/delete/', methods=['GET', 'POST'])
+@login_required
 def deleteCategory(category_id):
     """
     class name: deleteCategory
@@ -365,18 +373,15 @@ def deleteCategory(category_id):
     args: category_id (data type: int): the id of the category.
     returns: The categories page with the deleted category NOT listed.
     """
-    if 'username' not in login_session:
-        return redirect('/login')
+    deletedCategory = session.query(Category).filter_by(cid = category_id).one()
+    if request.method == 'POST' and user_authorized(deletedCategory.user_id, login_session['user_id']):
+        session.delete(deletedCategory)
+        session.commit()
+        flash('%s Successfully Deleted' % deletedCategory.name)
+        return redirect(url_for('categories', category_id = category_id))
     else:
-        deletedCategory = session.query(Category).filter_by(cid = category_id).one()
-        if request.method == 'POST' and user_authorized(deletedCategory.user_id, login_session['user_id']):
-            session.delete(deletedCategory)
-            session.commit()
-            flash('%s Successfully Deleted' % deletedCategory.name)
-            return redirect(url_for('categories', category_id = category_id))
-        else:
-            return render_template(
-            'deletecategory.html', category = deletedCategory)
+        return render_template(
+        'deletecategory.html', category = deletedCategory)
 
 @app.route('/categories/<int:category_id>/')
 @app.route('/categories/<int:category_id>/item/')
@@ -397,6 +402,7 @@ def categoryItem(category_id):
 
 
 @app.route('/categories/<int:category_id>/item/new/', methods=['GET', 'POST'])
+@login_required
 def newItem(category_id):
     """
     class name: newItem
@@ -404,22 +410,20 @@ def newItem(category_id):
     args: category_id (data type: int): the id of the category in which item will be added
     returns: The categories page with the new category listed.
     """
-    if 'username' not in login_session:
-        return redirect('/login')
+    category = session.query(Category).filter_by(cid=category_id).one()
+    if request.method == 'POST' and user_authorized(category.user_id, login_session['user_id']):
+        newItem = CategoryItem(name=request.form['name'], description=request.form['description'], 
+                                category_id=category_id, user_id=category.user_id)
+        session.add(newItem)
+        session.commit()
+        flash('New Item %s Successfully Created' % (newItem.name))
+        return redirect(url_for('categoryItem', category_id=category_id))
     else:
-        category = session.query(Category).filter_by(cid=category_id).one()
-        if request.method == 'POST' and user_authorized(category.user_id, login_session['user_id']):
-            newItem = CategoryItem(name=request.form['name'], description=request.form['description'], 
-                                   category_id=category_id, user_id=category.user_id)
-            session.add(newItem)
-            session.commit()
-            flash('New Item %s Successfully Created' % (newItem.name))
-            return redirect(url_for('categories', category_id=category_id))
-        else:
-            return render_template('newitem.html', category_id=category_id, category = category)
+        return render_template('newitem.html', category_id=category_id, category = category)
 
 
 @app.route('/categories/<int:category_id>/<int:item_id>/edit/', methods=['GET', 'POST'])
+@login_required
 def editItem(category_id, item_id):
     """
     class name: editCategory
@@ -428,27 +432,25 @@ def editItem(category_id, item_id):
           item_id (data type: int): the id of the item.  
     returns: The categories page with the edited item listed in the category.
     """
-    if 'username' not in login_session:
-        return redirect('/login')
-    else:
-        category = session.query(Category).filter_by(cid=category_id).one()
-        editedItem = session.query(CategoryItem).filter_by(item_id=item_id).one()
+    category = session.query(Category).filter_by(cid=category_id).one()
+    editedItem = session.query(CategoryItem).filter_by(item_id=item_id).one()
     
-        if request.method == 'POST' and user_authorized(editedItem.user_id, login_session['user_id']):
-            if request.form['name']:
-                editedItem.name = request.form['name']
-            if request.form['description']:
-                editedItem.description = request.form['description']
-            session.add(editedItem)
-            session.commit()
-            flash('Item %s Successfully Edited' % (editedItem.name))
-            return redirect(url_for('categoryItem', category_id = category_id))
-        else:
-             return render_template(
-                'edititem.html', category_id=category_id, item_id=item_id, item=editedItem)
+    if request.method == 'POST' and user_authorized(editedItem.user_id, login_session['user_id']):
+        if request.form['name']:
+            editedItem.name = request.form['name']
+        if request.form['description']:
+            editedItem.description = request.form['description']
+        session.add(editedItem)
+        session.commit()
+        flash('Item %s Successfully Edited' % (editedItem.name))
+        return redirect(url_for('categoryItem', category_id = category_id))
+    else:
+        return render_template(
+            'edititem.html', category_id=category_id, item_id=item_id, item=editedItem)
 
 
 @app.route('/categories/<int:category_id>/<int:item_id>/delete/', methods=['GET', 'POST'])
+@login_required
 def deleteItem(category_id, item_id):
     """
     class name: deleteItem
@@ -457,21 +459,17 @@ def deleteItem(category_id, item_id):
           item_id (data type: int): the id of the item.
     returns: The categories page with the deleted item NOT listed in the category.
     """
-    if 'username' not in login_session:
-        return redirect('/login')
-    else:
-        category = session.query(Category).filter_by(cid=category_id).one()
-        deletedItem = session.query(CategoryItem).filter_by(item_id=item_id).one()
+    category = session.query(Category).filter_by(cid=category_id).one()
+    deletedItem = session.query(CategoryItem).filter_by(item_id=item_id).one()
 
-        if request.method == 'POST' and user_authorized(deletedItem.user_id, login_session['user_id']):
-    
-            session.delete(deletedItem)
-            session.commit()
-            flash('Item %s Successfully Deleted!' % (deletedItem.name))
-            return redirect(url_for('categoryItem', category_id=category_id))
-        else:
-             return render_template(
-                'deleteitem.html', category_id=category_id, item=deletedItem)
+    if request.method == 'POST' and user_authorized(deletedItem.user_id, login_session['user_id']):
+        session.delete(deletedItem)
+        session.commit()
+        flash('Item %s Successfully Deleted!' % (deletedItem.name))
+        return redirect(url_for('categoryItem', category_id=category_id))
+    else:
+        return render_template(
+           'deleteitem.html', category_id=category_id, item=deletedItem)
 
 
 # Adding Latest Item Functionality
