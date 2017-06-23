@@ -87,6 +87,6 @@ Example:
 
 'http://localhost:5000/recent-items.atom' will return a feed of latest ten items added.
 
-# Live app
+# Webapp URL
 
 http://catelog-web.herokuapp.com
